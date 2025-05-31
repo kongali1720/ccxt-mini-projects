@@ -131,6 +131,26 @@ Akses dashboard di:
     http://localhost:3000/dashboard.html
 
 ---
+# 🧠 Username dan Password Default:
+Username: admin
+
+Password: merahdarah1720
+
+Kamu bisa ganti di bagian atas <script> sesuai keinginan:
+
+    const ADMIN_USER = 'admin';
+    const ADMIN_PASS = 'merahdarah1720';
+
+3 ✅ Jalankan dan akses:
+Letakkan file ini di folder public/admin.html
+
+Jalankan bot-nya seperti biasa (node ccxt_telegram_sqlite_bot.js)
+
+Akses dashboard admin:
+
+    http://localhost:3000/admin.html
+
+---
 
 ## ✅ Gaspol coding squad Indonesia! 🚀💻
 
