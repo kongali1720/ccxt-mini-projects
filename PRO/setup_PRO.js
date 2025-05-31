@@ -1,5 +1,6 @@
-// FILE: setup_PRO.js
+// FILE: setup_PRO_env.js
 
+require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 
@@ -10,10 +11,10 @@ const files = {
   'auto_sell_loop.js': `const ccxt = require('ccxt');
 const TelegramBot = require('node-telegram-bot-api');
 
-const API_KEY = 'API_KEY_KAMU';
-const API_SECRET = 'API_SECRET_KAMU';
-const TELEGRAM_TOKEN = 'TELEGRAM_BOT_TOKEN';
-const TELEGRAM_CHAT_ID = 'CHAT_ID_KAMU';
+const API_KEY = process.env.API_KEY;
+const API_SECRET = process.env.API_SECRET;
+const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 const SYMBOL = 'BTC/USDT';
 const AMOUNT = 0.001;
 const BUY_PRICE = 25000;
@@ -59,7 +60,7 @@ const sqlite3 = require('sqlite3').verbose();
 const { Parser } = require('json2csv');
 
 const app = express();
-const port = 3001;
+const port = process.env.CSV_EXPORT_PORT || 3001;
 
 const db = new sqlite3.Database('./trade_history.db');
 
@@ -84,11 +85,11 @@ app.listen(port, () => {
   'multi_wallet_viewer.js': `const ccxt = require('ccxt');
 const express = require('express');
 const app = express();
-const port = 3002;
+const port = process.env.WALLET_VIEWER_PORT || 3002;
 
 const WALLETS = [
-  { apiKey: 'API_KEY_1', secret: 'API_SECRET_1' },
-  { apiKey: 'API_KEY_2', secret: 'API_SECRET_2' },
+  { apiKey: process.env.API_KEY_1, secret: process.env.API_SECRET_1 },
+  { apiKey: process.env.API_KEY_2, secret: process.env.API_SECRET_2 },
 ];
 
 app.get('/api/wallets-balance', async (req, res) => {
@@ -116,9 +117,9 @@ app.listen(port, () => {
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
-const port = 3003;
+const port = process.env.API_AUTH_PORT || 3003;
 
-const API_TOKENS = ['tokenRahasia123', 'tokenLain456'];
+const API_TOKENS = process.env.API_TOKENS.split(',');
 
 const db = new sqlite3.Database('./trade_history.db');
 
@@ -146,4 +147,27 @@ for (const [file, content] of Object.entries(files)) {
   fs.writeFileSync(path.join(folder, file), content);
 }
 
-console.log('✅ Folder PRO dan file-file fitur sudah dibuat!');
+fs.writeFileSync('.env', `# Binance API
+API_KEY=your_binance_api_key
+API_SECRET=your_binance_api_secret
+
+# Telegram
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
+
+# CSV Exporter
+CSV_EXPORT_PORT=3001
+
+# Multi Wallet Viewer
+API_KEY_1=your_wallet1_api_key
+API_SECRET_1=your_wallet1_secret
+API_KEY_2=your_wallet2_api_key
+API_SECRET_2=your_wallet2_secret
+WALLET_VIEWER_PORT=3002
+
+# API Token Auth
+API_TOKENS=tokenRahasia123,tokenLain456
+API_AUTH_PORT=3003
+`);
+
+console.log('✅ Folder PRO, file fitur, dan .env sudah dibuat lengkap!');
