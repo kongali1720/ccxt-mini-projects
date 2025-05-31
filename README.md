@@ -1,14 +1,10 @@
-# 🎉 **🎵 Contoh penggunaan CCXT — ambil harga Bitcoin dari Binance 
-
+# 🎉  CCXT 
 ---
 
 <p align="center"> <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTYwNnR2bTNhd2w1d24yYmN1dTRjaTlib3BidWI2ZHY4cXMwbXQwbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DqiMTFxiXx0VaVZQbF/giphy.gif" width="300"/> </p>
 
 ---
-
-## ✅ Gaspol coding squad Indonesia! 🚀💻
----
-Halo, Sobat Koding!  
+# Halo, Sobat Koding!  
 
 ini adalah Kumpulan mini project Python yang gak bikin ngantuk!  
 
@@ -18,22 +14,15 @@ Langsung eksekusi, langsung paham.
 
 ---
 
-## 🚀 Project Terbaru
-
-
-
-
-import ccxt
-
-exchange = ccxt.binance()
-ticker = exchange.fetch_ticker('BTC/USDT')
-print(f"Harga BTC sekarang: {ticker['last']} USDT")
+## 🚀 Project Terbaru Bagaimana CCXT bisa ambil harga Bitcoin dari Binance 
 
 ---
 
-## ✅ 💻Install dulu ccxt 🚀
+## ✅ 💻 Yuk kita sama sama Install dulu ccxt nya 🚀
 
     pip install ccxt
+
+---
 
 Cara pakai:
 
@@ -42,6 +31,56 @@ Simpan di file mini_ccxt.py
 Kalau mau lihat saldo, buka di exchange = ccxt.binance({...}) lalu isi apiKey dan secret dengan API dari Binance-mu
 
 Jalankan:
+
+
+    python mini_ccxt.py
+
+    python mini_bot_trading.py
+
+Cara pakai:
+
+    mini_bot_trading.js
+    
+Simpan sebagai mini_bot_trading.js
+
+Isi API_KEY dan API_SECRET dengan milikmu
+
+Jalankan:
+
+    npm install ccxt
+
+    node mini_bot_trading.js
+
+    node auto_trade_live_price.js
+    
+---
+📌 Cara Pasang:
+---
+1. Salin ccxt-bot.service ke:
+
+        sudo nano /etc/systemd/system/ccxt-bot.service
+
+2. Reload systemd:
+
+        sudo systemctl daemon-reexec
+
+3. Jalankan:
+
+        sudo systemctl daemon-reload
+
+4. Auto start saat boot:
+
+        sudo systemctl start ccxt-bot
+
+5. Cek status:
+
+       sudo systemctl status ccxt-bot
+    
+---
+
+📁 Log Tersimpan di:
+
+    ./trade_log.txt
 ---
 
 ## ✅ Gaspol coding squad Indonesia! 🚀💻
