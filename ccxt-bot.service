@@ -1,0 +1,13 @@
+[Unit]
+Description=CCXT Auto Trading Bot Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /path/to/auto_trade_with_log.js
+WorkingDirectory=/path/to/
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
