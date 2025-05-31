@@ -82,6 +82,38 @@ Jalankan:
 
     ./trade_log.txt
 ---
+# Untuk 🐳 Build & Run Docker
+
+# Dockerfile
+
+FROM node:18-alpine
+WORKDIR /app
+
+COPY . .
+
+RUN npm install ccxt sqlite3 node-telegram-bot-api
+
+CMD ["node", "ccxt_telegram_sqlite_bot.js"]
+
+
+    docker build -t ccxt-bot .
+
+    docker run -d --name ccxt-bot ccxt-bot
+
+---
+
+# 🚀 Dashboard frontend 🚀 Sekarang buka:
+
+    http://localhost:3000/ untuk lihat dashboard
+
+---
+#  Buat live chart:
+
+  ✅ Sekarang buka 
+    
+    http://localhost:3000/chart.html dan nikmati grafik harga crypto real-time langsung dari CCXT
+
+---
 
 ## ✅ Gaspol coding squad Indonesia! 🚀💻
 
@@ -89,16 +121,6 @@ Halo, Sobat Koding!
 Kumpulan mini project Python yang gak bikin ngantuk!  
 Belajar sambil praktek langsung, cocok buat yang suka action daripada teori.  
 Langsung eksekusi, langsung paham.
-
----
-
-## 🚀 Project Terbaru
-
-Masukkan URL YouTube → langsung convert & download file MP3.  
-✨ Fitur:
-- `pytube` untuk download video/audio dari YouTube
-- `tqdm` untuk progress bar
-- Hasil langsung `.mp3`, bisa diputar kapan aja  
 
 ---
 
