@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📈 Live BTC/USDT Price Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #111;
+      color: #0f0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    canvas {
+      background: #222;
+      border: 1px solid #0f0;
+      max-width: 800px;
+      width: 100%;
+    }
+    h1 {
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>📈 Live BTC/USDT Chart</h1>
+  <canvas id="priceChart" height="400"></canvas>
+
+  <script>
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    const labels = [];
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'BTC/USDT Price',
+        data: [],
+        fill: false,
+        borderColor: 'lime',
+        tension: 0.1
+      }]
+    };
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        scales: {
+          x: {
+            ticks: { color: '#0f0' }
+          },
+          y: {
+            ticks: { color: '#0f0' }
+          }
+        },
+        plugins: {
+          legend: { labels: { color: '#0f0' } }
+        }
+      }
+    };
+    const priceChart = new Chart(ctx, config);
+
+    async function fetchPrice() {
+      try {
+        const res = await fetch('/api/live-price');
+        const json = await res.json();
+        const price = json.price;
+        const time = new Date().toLocaleTimeString();
+
+        labels.push(time);
+        data.datasets[0].data.push(price);
+
+        if (labels.length > 20) {
+          labels.shift();
+          data.datasets[0].data.shift();
+        }
+
+        priceChart.update();
+      } catch (e) {
+        console.error('Error fetching price:', e);
+      }
+    }
+
+    setInterval(fetchPrice, 5000); // update every 5 seconds
+  </script>
+</body>
+</html>
 
