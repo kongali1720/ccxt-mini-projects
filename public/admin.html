@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🟥 Admin Trade Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #1a0000;
+      color: #ff4d4d;
+      font-family: monospace;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #ff3333;
+    }
+    .login-box, .dashboard {
+      max-width: 800px;
+      margin: auto;
+      background: #330000;
+      border: 1px solid #ff1a1a;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background: #1a0000;
+      border: 1px solid #ff3333;
+      color: #ff4d4d;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #ff1a1a;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #ff4d4d;
+      padding: 8px;
+      text-align: center;
+    }
+    canvas {
+      margin-top: 2rem;
+      background: #1a0000;
+      border: 1px solid #ff1a1a;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box" id="login-box">
+    <h1>🔐 Admin Login</h1>
+    <input type="text" id="username" placeholder="Username"/>
+    <input type="password" id="password" placeholder="Password"/>
+    <button onclick="login()">Login</button>
+    <p id="error" style="color: yellow; text-align: center;"></p>
+  </div>
+
+  <div class="dashboard" id="dashboard" style="display:none;">
+    <h2>📊 BTC/USDT Price Tracker</h2>
+    <div>Live Price: <span id="live-price">$0.00</span></div>
+    <canvas id="chart" height="200"></canvas>
+
+    <h2>📜 Trade History</h2>
+    <table id="trade-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Price</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const ADMIN_USER = 'admin';
+    const ADMIN_PASS = 'merahdarah1720';
+
+    function login() {
+      const u = document.getElementById('username').value;
+      const p = document.getElementById('password').value;
+      if (u === ADMIN_USER && p === ADMIN_PASS) {
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        fetchLivePrice();
+        fetchTradeHistory();
+        setInterval(fetchLivePrice, 5000);
+        setInterval(fetchTradeHistory, 10000);
+      } else {
+        document.getElementById('error').innerText = '❌ Username/password salah!';
+      }
+    }
+
+    const labels = [];
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'BTC/USDT',
+        data: [],
+        borderColor: '#ff4d4d',
+        tension: 0.3
+      }]
+    };
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        plugins: {
+          legend: { labels: { color: '#ff4d4d' } }
+        },
+        scales: {
+          x: { ticks: { color: '#ff4d4d' } },
+          y: { ticks: { color: '#ff4d4d' } }
+        }
+      }
+    };
+    const chart = new Chart(document.getElementById('chart'), config);
+
+    async function fetchLivePrice() {
+      const res = await fetch('/api/live-price');
+      const json = await res.json();
+      const time = new Date().toLocaleTimeString();
+      document.getElementById('live-price').innerText = `$${json.price}`;
+      labels.push(time);
+      data.datasets[0].data.push(json.price);
+      if (labels.length > 20) {
+        labels.shift();
+        data.datasets[0].data.shift();
+      }
+      chart.update();
+    }
+
+    async function fetchTradeHistory() {
+      const res = await fetch('/api/trades');
+      const trades = await res.json();
+      const tbody = document.querySelector('#trade-table tbody');
+      tbody.innerHTML = '';
+      trades.forEach((t, i) => {
+        const row = `<tr>
+          <td>${i + 1}</td>
+          <td style="color:${t.type === 'BUY' ? 'lime' : 'red'}">${t.type}</td>
+          <td>${t.amount}</td>
+          <td>$${t.price}</td>
+          <td>${new Date(t.timestamp).toLocaleString()}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+  </script>
+</body>
+</html>
