@@ -102,16 +102,19 @@ CMD ["node", "ccxt_telegram_sqlite_bot.js"]
 
 ---
 
-# 🚀 Dashboard frontend 🚀 Sekarang buka:
+# 🚀 untuk lihat Dashboard frontend 🚀 Sekarang buka:
 
-    http://localhost:3000/ untuk lihat dashboard
+    http://localhost:3000
 
 ---
+
 #  Buat live chart:
 
   ✅ Sekarang buka 
     
-    http://localhost:3000/chart.html dan nikmati grafik harga crypto real-time langsung dari CCXT
+    http://localhost:3000/chart.html 
+
+dan nikmati grafik harga crypto real-time langsung dari CCXT
 
 ---
 
