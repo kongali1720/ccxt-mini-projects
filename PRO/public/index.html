@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>BTC/USDT Live Chart</h2>
+  <canvas id="chart" width="600" height="400"></canvas>
+  <script>
+    async function loadData() {
+      const res = await fetch('/api/chart-data');
+      const data = await res.json();
+      const labels = data.map(d => new Date(d.timestamp).toLocaleTimeString());
+      const prices = data.map(d => d.price);
+
+      new Chart(document.getElementById('chart'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Price',
+            data: prices,
+            borderColor: 'red',
+            fill: false
+          }]
+        }
+      });
+    }
+    loadData();
+  </script>
+</body>
+</html>
