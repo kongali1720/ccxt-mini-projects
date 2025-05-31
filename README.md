@@ -118,6 +118,20 @@ dan nikmati grafik harga crypto real-time langsung dari CCXT
 
 ---
 
+# ✅ Cara pakai:
+
+👉  Simpan file di: 
+
+    public/dashboard.html
+
+Jalankan project-mu seperti biasa (node ccxt_telegram_sqlite_bot.js)
+
+Akses dashboard di:
+
+    http://localhost:3000/dashboard.html
+
+---
+
 ## ✅ Gaspol coding squad Indonesia! 🚀💻
 
 Halo, Sobat Koding!  
