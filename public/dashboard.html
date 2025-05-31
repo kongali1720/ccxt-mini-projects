@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🧠 Neon Hacker Crypto Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+    h1 {
+      color: #00ffcc;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      padding: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #0f0;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #003300;
+    }
+    canvas {
+      margin-top: 2rem;
+      background: #111;
+      border: 1px solid #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>💻 KONGALI1720 CYBER DASHBOARD</h1>
+
+  <div class="container">
+    <h2>📈 Live BTC/USDT Price: <span id="live-price">Loading...</span></h2>
+    <canvas id="chart" height="200"></canvas>
+
+    <h2>📜 Trade History</h2>
+    <table id="trade-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Price</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const labels = [];
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'BTC/USDT',
+        data: [],
+        borderColor: '#00ffcc',
+        tension: 0.3
+      }]
+    };
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        plugins: {
+          legend: { labels: { color: '#0f0' } }
+        },
+        scales: {
+          x: { ticks: { color: '#0f0' } },
+          y: { ticks: { color: '#0f0' } }
+        }
+      }
+    };
+    const chart = new Chart(document.getElementById('chart'), config);
+
+    async function fetchLivePrice() {
+      const res = await fetch('/api/live-price');
+      const json = await res.json();
+      const time = new Date().toLocaleTimeString();
+      document.getElementById('live-price').innerText = `$${json.price}`;
+      labels.push(time);
+      data.datasets[0].data.push(json.price);
+      if (labels.length > 20) {
+        labels.shift();
+        data.datasets[0].data.shift();
+      }
+      chart.update();
+    }
+
+    async function fetchTradeHistory() {
+      const res = await fetch('/api/trades');
+      const trades = await res.json();
+      const tbody = document.querySelector('#trade-table tbody');
+      tbody.innerHTML = '';
+      trades.forEach((t, i) => {
+        const row = `<tr>
+          <td>${i + 1}</td>
+          <td style="color:${t.type === 'BUY' ? 'lime' : 'red'}">${t.type}</td>
+          <td>${t.amount}</td>
+          <td>$${t.price}</td>
+          <td>${new Date(t.timestamp).toLocaleString()}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    setInterval(() => {
+      fetchLivePrice();
+      fetchTradeHistory();
+    }, 5000);
+
+    // Initial load
+    fetchLivePrice();
+    fetchTradeHistory();
+  </script>
+</body>
+</html>
